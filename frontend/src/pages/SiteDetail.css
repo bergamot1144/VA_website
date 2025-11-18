@@ -1,0 +1,228 @@
+.site-detail-container {
+  min-height: 100vh;
+  background-color: #0a0a0a;
+}
+
+.site-detail-header {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 20px rgba(236, 72, 153, 0.08),
+              0 0 0 1px rgba(244, 114, 182, 0.08);
+  border-bottom: 1px solid rgba(244, 114, 182, 0.08);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.back-link {
+  color: rgba(244, 114, 182, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #ec4899;
+}
+
+.site-detail-header h1 {
+  font-size: 2rem;
+  margin: 0.5rem 0;
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.site-url {
+  color: rgba(244, 114, 182, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid rgba(244, 114, 182, 0.25);
+  transition: border-color 0.2s;
+}
+
+.site-url:hover {
+  border-bottom-color: #ec4899;
+  color: #ec4899;
+}
+
+.logout-button {
+  background: rgba(236, 72, 153, 0.1);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  padding: 0.65rem 1.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.01em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(236, 72, 153, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.logout-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(236, 72, 153, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.logout-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.logout-button:hover {
+  background: rgba(236, 72, 153, 0.15);
+  border-color: rgba(236, 72, 153, 0.4);
+  color: #ec4899;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);
+}
+
+.site-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.site-description-section {
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(244, 114, 182, 0.08);
+  border: 1px solid rgba(244, 114, 182, 0.08);
+}
+
+.site-description-section p {
+  margin: 0;
+  line-height: 1.8;
+  color: #e0e0e0;
+}
+
+.site-detail-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;
+}
+
+.loading,
+.error,
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #f472b6;
+}
+
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lesson-card {
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(244, 114, 182, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  border: 1px solid rgba(244, 114, 182, 0.08);
+  position: relative;
+  display: block;
+}
+
+.lesson-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(236, 72, 153, 0.15),
+              0 0 0 1px rgba(236, 72, 153, 0.25);
+  border-color: rgba(236, 72, 153, 0.25);
+}
+
+.lesson-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.lesson-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #ffffff;
+  flex: 1;
+}
+
+.video-badge {
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-left: 1rem;
+  box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25);
+}
+
+.lesson-preview {
+  color: #888;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-arrow {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: #ec4899;
+  transition: transform 0.2s;
+}
+
+.lesson-card:hover .lesson-arrow {
+  transform: translateY(-50%) translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .site-detail-content {
+    padding: 1rem;
+  }
+
+  .lesson-card {
+    padding: 1rem;
+  }
+}

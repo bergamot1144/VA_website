@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+*.env.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+*.db
+*.db-journal
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Видео файлы (но сохраняем структуру папок)
+backend/uploads/videos/*.mp4
+backend/uploads/videos/*.avi
+backend/uploads/videos/*.mov
+backend/uploads/videos/*.mkv
+backend/uploads/videos/*.webm
+backend/uploads/videos/*.m4v
+!backend/uploads/videos/.gitkeep
+
+# Temporary files
+*.tmp
+.cache/
+
