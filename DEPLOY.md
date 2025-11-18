@@ -504,7 +504,7 @@ cd ..
 npm run build
 ```
 
-### Шаг 3: Запуск через PM2
+### Шаг 6: Запуск через PM2
 
 ```powershell
 cd C:\www\venom-agency\backend
@@ -532,7 +532,7 @@ pm2 start ecosystem.config.js
 pm2 save
 ```
 
-### Шаг 4: Настройка IIS или другого веб-сервера
+### Шаг 7: Настройка IIS или другого веб-сервера
 
 Настройте IIS для раздачи frontend из `C:\www\venom-agency\frontend\dist` и проксирования `/api` на `http://localhost:3001`.
 
