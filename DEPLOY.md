@@ -73,27 +73,140 @@ npm run prisma:migrate
 ```bash
 cd backend
 
-# Создать .env файл
+# Создать .env файл (Linux/Mac)
 nano .env
+
+# Или для Windows
+notepad .env
 ```
 
-Добавьте в `.env`:
+#### Генерация JWT_SECRET
+
+**JWT_SECRET** - это секретный ключ для подписи JWT токенов. Это критически важный параметр безопасности!
+
+**⚠️ ВАЖНО:** 
+- Никогда не используйте простые или предсказуемые значения
+- Используйте случайно сгенерированную строку минимум 32 символа
+- Держите этот ключ в секрете, не коммитьте в Git
+
+**Способы генерации JWT_SECRET:**
+
+1. **Через Node.js** (если Node.js установлен):
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+   Это выдаст строку вида: `a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6`
+
+2. **Через OpenSSL** (если установлен):
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. **Онлайн генератор:**
+   - Перейдите на https://generate-secret.vercel.app/32
+   - Или используйте любой другой надежный генератор случайных строк
+
+4. **Вручную** (не рекомендуется, но возможно):
+   - Используйте длинную случайную строку из букв, цифр и символов
+   - Минимум 32 символа, лучше 64+
+
+#### Создание .env файла
+
+Создайте файл `backend/.env` со следующим содержимым:
 
 ```env
-# Обязательные настройки
-JWT_SECRET=сгенерируйте-очень-сложный-ключ-минимум-32-символа
+# ==========================================
+# ОБЯЗАТЕЛЬНЫЕ НАСТРОЙКИ
+# ==========================================
+
+# JWT_SECRET - секретный ключ для подписи токенов авторизации
+# СГЕНЕРИРУЙТЕ СВОЙ УНИКАЛЬНЫЙ КЛЮЧ! Используйте один из методов выше.
+# Пример сгенерированного ключа:
+JWT_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2
+
+# PORT - порт, на котором будет работать backend сервер
+# Обычно 3001, но можете изменить если нужно
+PORT=3001
+
+# DATABASE_URL - путь к базе данных SQLite
+# Для продакшена оставьте как есть (SQLite), или используйте PostgreSQL (см. ниже)
+DATABASE_URL="file:./prisma/dev.db"
+
+# FRONTEND_URL - URL вашего frontend приложения
+# Для продакшена укажите полный URL с https://
+# Для разработки используйте http://localhost:5173
+FRONTEND_URL=https://ваш-домен.com
+# Или для локальной разработки:
+# FRONTEND_URL=http://localhost:5173
+```
+
+#### Пример заполненного .env файла для продакшена:
+
+```env
+# Пример конфигурации для продакшена
+JWT_SECRET=7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2
 PORT=3001
 DATABASE_URL="file:./prisma/dev.db"
-FRONTEND_URL=https://ваш-домен.com
-
-# Опционально (для PostgreSQL)
-# DATABASE_URL="postgresql://user:password@localhost:5432/venom_agency?schema=public"
+FRONTEND_URL=https://venom-agency.com
 ```
 
-**Важно:** Сгенерируйте безопасный JWT_SECRET:
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+#### Пример заполненного .env файла для разработки:
+
+```env
+# Пример конфигурации для локальной разработки
+JWT_SECRET=dev-secret-key-change-in-production-12345678901234567890
+PORT=3001
+DATABASE_URL="file:./prisma/dev.db"
+FRONTEND_URL=http://localhost:5173
 ```
+
+#### Опционально: Использование PostgreSQL вместо SQLite
+
+Для лучшей производительности в продакшене можно использовать PostgreSQL:
+
+1. Установите PostgreSQL на сервере
+2. Создайте базу данных:
+   ```bash
+   sudo -u postgres psql
+   CREATE DATABASE venom_agency;
+   CREATE USER venom_user WITH PASSWORD 'ваш_пароль';
+   GRANT ALL PRIVILEGES ON DATABASE venom_agency TO venom_user;
+   \q
+   ```
+
+3. Обновите `.env`:
+   ```env
+   DATABASE_URL="postgresql://venom_user:ваш_пароль@localhost:5432/venom_agency?schema=public"
+   ```
+
+4. Обновите `backend/prisma/schema.prisma`:
+   ```prisma
+   datasource db {
+     provider = "postgresql"  // Измените с "sqlite" на "postgresql"
+     url      = env("DATABASE_URL")
+   }
+   ```
+
+5. Примените миграции:
+   ```bash
+   npm run prisma:generate
+   npm run prisma:migrate
+   ```
+
+#### Проверка .env файла
+
+После создания `.env` файла убедитесь что:
+
+1. ✅ Файл находится в папке `backend/.env` (не `backend/backend/.env`)
+2. ✅ JWT_SECRET длиной минимум 32 символа
+3. ✅ Нет лишних пробелов вокруг знака `=`
+4. ✅ Значения в кавычках (если содержат пробелы или специальные символы)
+5. ✅ FRONTEND_URL указан правильно (для продакшена с https://)
+
+**Важно для безопасности:**
+- Никогда не коммитьте `.env` в Git (он уже в .gitignore)
+- Храните `.env` в безопасном месте
+- Регулярно меняйте JWT_SECRET в продакшене (это разлогинит всех пользователей, делайте осторожно)
 
 ### Шаг 6: Создание администратора
 
@@ -271,16 +384,24 @@ sudo certbot renew --dry-run
 
 ### Шаг 11: Обновление FRONTEND_URL в .env
 
-После настройки домена обновите `backend/.env`:
+После настройки домена и получения SSL сертификата обновите `backend/.env`:
 
 ```env
 FRONTEND_URL=https://ваш-домен.com
 ```
 
+**Почему это важно:**
+- FRONTEND_URL используется для CORS (Cross-Origin Resource Sharing)
+- Если указан неправильно, frontend не сможет делать запросы к API
+- После изменения обязательно перезапустите backend
+
 Перезапустите backend:
 
 ```bash
 pm2 restart venom-agency-backend
+
+# Проверьте логи на наличие ошибок
+pm2 logs venom-agency-backend
 ```
 
 ## Вариант 2: Развертывание на Windows Server
@@ -308,15 +429,77 @@ npm run install:all
 cd backend
 npm run prisma:generate
 npm run prisma:migrate
+```
+
+### Шаг 3: Создание .env файла (Windows)
+
+```powershell
+cd backend
 
 # Создать .env файл
-Copy-Item .env.example .env
-# Отредактируйте .env файл
+# Вариант 1: Через Notepad
+notepad .env
 
-# Создать администратора
-npm run user:create admin ваш_пароль ADMIN
+# Вариант 2: Через PowerShell
+New-Item -ItemType File -Path .env
+notepad .env
+```
 
-# Собрать проект
+**Генерация JWT_SECRET на Windows:**
+
+Если Node.js установлен:
+```powershell
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Или используйте онлайн генератор: https://generate-secret.vercel.app/32
+
+**Содержимое .env файла:**
+
+Создайте файл `backend\.env` со следующим содержимым (замените значения на свои):
+
+```env
+# JWT_SECRET - секретный ключ для подписи токенов
+# СГЕНЕРИРУЙТЕ СВОЙ УНИКАЛЬНЫЙ КЛЮЧ! Минимум 32 символа
+JWT_SECRET=ваш-сгенерированный-64-символьный-ключ-из-букв-и-цифр-123456789012
+
+# PORT - порт backend сервера
+PORT=3001
+
+# DATABASE_URL - путь к базе данных
+DATABASE_URL="file:./prisma/dev.db"
+
+# FRONTEND_URL - URL frontend приложения
+# Для продакшена:
+FRONTEND_URL=https://ваш-домен.com
+# Для локальной разработки:
+# FRONTEND_URL=http://localhost:5173
+```
+
+**Пример заполненного .env:**
+
+```env
+JWT_SECRET=7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2
+PORT=3001
+DATABASE_URL="file:./prisma/dev.db"
+FRONTEND_URL=https://venom-agency.com
+```
+
+**Важно:** 
+- Сохраните файл в папке `backend\.env` (не в корне проекта)
+- Убедитесь что файл сохранен как `.env` (не `.env.txt`)
+- В Windows Explorer может скрывать файлы начинающиеся с точки - включите показ скрытых файлов
+
+### Шаг 4: Создание администратора
+
+```powershell
+cd backend
+npm run user:create admin ваш_безопасный_пароль ADMIN
+```
+
+### Шаг 5: Сборка проекта
+
+```powershell
 cd ..
 npm run build
 ```
