@@ -182,6 +182,17 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         add_header Access-Control-Allow-Origin *;
+        
+        # Отключаем кеширование для видео файлов
+        location ~* \.(mp4|avi|mov|mkv|webm|m4v)$ {
+            proxy_pass http://localhost:3001;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            add_header Access-Control-Allow-Origin *;
+            add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
+        }
     }
 }
 
@@ -222,6 +233,17 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         add_header Access-Control-Allow-Origin *;
+        
+        # Отключаем кеширование для видео файлов
+        location ~* \.(mp4|avi|mov|mkv|webm|m4v)$ {
+            proxy_pass http://localhost:3001;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            add_header Access-Control-Allow-Origin *;
+            add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
+        }
     }
 }
 ```

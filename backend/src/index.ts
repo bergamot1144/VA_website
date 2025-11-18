@@ -34,6 +34,17 @@ app.use('/uploads', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL || 'http://localhost:5173');
   res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  
+  // Отключаем кеширование только для видео файлов
+  const videoExtensions = ['.mp4', '.avi', '.mov', '.mkv', '.webm', '.m4v'];
+  const isVideo = videoExtensions.some(ext => req.path.toLowerCase().endsWith(ext));
+  
+  if (isVideo) {
+    res.header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.header('Pragma', 'no-cache');
+    res.header('Expires', '0');
+  }
+  
   next();
 }, express.static(path.join(__dirname, '../uploads')));
 
